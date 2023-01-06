@@ -4,23 +4,23 @@
   <meta charset="utf-8">
   
   
-  <title>第二篇博客 | Hexo</title>
+  <title>第二篇博客 | 枫叶苑</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="buuctf-web-[NCTF2019]Fake XML cookbook1.打开发现登陆界面 2.XXE是什么 （1）XXE：XML External Entity 即外部实体，从安全角度理解成XML External Entity attack 外部实体注入攻击。由于程序在解析输入的XML数据时， 解析了攻击者伪造的外部实体而产生的。例如PHP中的simplexml_load 默认情况下会解">
 <meta property="og:type" content="article">
 <meta property="og:title" content="第二篇博客">
 <meta property="og:url" content="http://example.com/2023/01/06/%E7%AC%AC%E4%BA%8C%E7%AF%87%E5%8D%9A%E5%AE%A2/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="枫叶苑">
 <meta property="og:description" content="buuctf-web-[NCTF2019]Fake XML cookbook1.打开发现登陆界面 2.XXE是什么 （1）XXE：XML External Entity 即外部实体，从安全角度理解成XML External Entity attack 外部实体注入攻击。由于程序在解析输入的XML数据时， 解析了攻击者伪造的外部实体而产生的。例如PHP中的simplexml_load 默认情况下会解">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/971753/1668338064844-b136849a-2bda-4687-8e09-e3ff7ed122f0.png">
 <meta property="article:published_time" content="2023-01-06T05:19:42.000Z">
 <meta property="article:modified_time" content="2023-01-06T05:34:15.053Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:author" content="深山法海">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/971753/1668338064844-b136849a-2bda-4687-8e09-e3ff7ed122f0.png">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="枫叶苑" type="application/atom+xml">
   
   
     <link rel="shortcut icon" href="/favicon.png">
@@ -48,7 +48,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">枫叶苑</a>
       </h1>
       
     </div>
@@ -63,12 +63,12 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
       </div>
     </div>
   </div>
@@ -113,7 +113,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2023/01/06/%E7%AC%AC%E4%BA%8C%E7%AF%87%E5%8D%9A%E5%AE%A2/" data-id="clck2t9wk0000s4vdbpq79bhs" data-title="第二篇博客" class="article-share-link">Share</a>
+      <a data-url="http://example.com/2023/01/06/%E7%AC%AC%E4%BA%8C%E7%AF%87%E5%8D%9A%E5%AE%A2/" data-id="clck9htcg0001fkvd2a7u9w4z" data-title="第二篇博客" class="article-share-link">分享</a>
       
       
       
@@ -125,7 +125,7 @@
   
   
     <a href="/2023/01/06/%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">后一篇</strong>
       <div class="article-nav-title">第一篇文章</div>
     </a>
   
@@ -149,9 +149,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">January 2023</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/01/">一月 2023</a></li></ul>
     </div>
   </div>
 
@@ -159,7 +159,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
         
@@ -188,7 +188,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       
-      &copy; 2023 John Doe<br>
+      &copy; 2023 深山法海<br>
       Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
