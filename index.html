@@ -147,76 +147,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/06/%E7%AC%AC%E4%BA%8C%E7%AF%87%E5%8D%9A%E5%AE%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="深山法海">
-      <meta itemprop="description" content="选择有时候比努力更重要">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="枫叶苑">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/01/06/%E7%AC%AC%E4%BA%8C%E7%AF%87%E5%8D%9A%E5%AE%A2/" class="post-title-link" itemprop="url">第二篇博客</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2023-01-06 13:19:42 / 修改时间：13:34:15" itemprop="dateCreated datePublished" datetime="2023-01-06T13:19:42+08:00">2023-01-06</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="buuctf-web-NCTF2019-Fake-XML-cookbook"><a href="#buuctf-web-NCTF2019-Fake-XML-cookbook" class="headerlink" title="buuctf-web-[NCTF2019]Fake XML cookbook"></a>buuctf-web-[NCTF2019]Fake XML cookbook</h2><p>1.打开发现登陆界面</p>
-<p>2.XXE是什么</p>
-<p>（1）XXE：XML External Entity 即外部实体，从安全角度理解成XML External Entity attack 外部实体注入攻击。由于程序在解析输入的XML数据时，</p>
-<p>解析了攻击者伪造的外部实体而产生的。例如PHP中的simplexml_load 默认情况下会解析外部实体，有XXE漏洞的标志性函数为simplexml_load_string（）。</p>
-<p>（2）XXE原理</p>
-<p>有了 XML 实体，关键字 ‘SYSTEM’ 会令 XML 解析器从URI中读取内容，并允许它在 XML 文档中被替换。因此，攻击者可以通过实体将他自定义的值发送</p>
-<p>给应用程序，然后让应用程序去呈现。 简单来说，攻击者强制XML解析器去访问攻击者指定的资源内容（可能是系统上本地文件亦或是远程系统上的文件）</p>
-<p><img src="https://cdn.nlark.com/yuque/0/2022/png/971753/1668338064844-b136849a-2bda-4687-8e09-e3ff7ed122f0.png" alt="img"></p>
-<p>3.利用burp抓包</p>
-<p><strong>改成post方法</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE note [</span><br><span class="line">  &lt;!ENTITY admin SYSTEM &quot;file:///etc/passwd&quot;&gt;</span><br><span class="line">  ]&gt;</span><br><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; </span><br><span class="line">&lt;!DOCTYPE note [   </span><br><span class="line"> &lt;!ENTITY admin SYSTEM &quot;file:///flag&quot;&gt;   ]&gt;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/06/%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -231,7 +161,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2023/01/06/%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/" class="post-title-link" itemprop="url">第一篇文章</a>
+            <a href="/2023/01/06/%E7%AC%AC%E4%B8%80%E7%AF%87%E6%96%87%E7%AB%A0/" class="post-title-link" itemprop="url">linux系统命令</a>
         </h2>
 
         <div class="post-meta">
@@ -242,7 +172,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-01-06 11:18:40 / 修改时间：11:20:14" itemprop="dateCreated datePublished" datetime="2023-01-06T11:18:40+08:00">2023-01-06</time>
+              <time title="创建时间：2023-01-06 11:18:40 / 修改时间：16:52:49" itemprop="dateCreated datePublished" datetime="2023-01-06T11:18:40+08:00">2023-01-06</time>
             </span>
 
           
@@ -421,7 +351,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
