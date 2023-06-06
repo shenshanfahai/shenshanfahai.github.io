@@ -109,7 +109,7 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><h4 id="1-下载地址"><a href="#1-下载地址" class="headerlink" title="1.下载地址"></a>1.下载地址</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.vulnhub.com/entry/dc-5,314/</span><br></pre></td></tr></table></figure>
+  <h3 id="一、前期准备"><a href="#一、前期准备" class="headerlink" title="一、前期准备"></a>一、前期准备</h3><h4 id="1-下载地址"><a href="#1-下载地址" class="headerlink" title="1.下载地址"></a>1.下载地址</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.vulnhub.com/entry/dc-5,314/</span><br></pre></td></tr></table></figure>
 
 
 
@@ -119,7 +119,7 @@
 <span id="more"></span>
 
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230605134110517.png" alt="image-20230605134110517"></p>
-<h2 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h2><h4 id="1-获取ip"><a href="#1-获取ip" class="headerlink" title="1.获取ip"></a>1.获取ip</h4><p>在 kali 中输入 <code>ifconfig</code> 产看当前IP地址。</p>
+<h3 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h3><h4 id="1-获取ip"><a href="#1-获取ip" class="headerlink" title="1.获取ip"></a>1.获取ip</h4><p>在 kali 中输入 <code>ifconfig</code> 产看当前IP地址。</p>
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC5%E9%9D%B6%E5%9C%BA/image-20230606083654295.png" alt="image-20230606083654295"></p>
 <h4 id="2-探测存活主机"><a href="#2-探测存活主机" class="headerlink" title="2.探测存活主机"></a>2.探测存活主机</h4><p>扫描C段地址，查询同一网段中存活主机</p>
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC5%E9%9D%B6%E5%9C%BA/image-20230606084959856.png" alt="image-20230606084959856"></p>
@@ -140,7 +140,7 @@
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC5%E9%9D%B6%E5%9C%BA/image-20230606094252367.png" alt="image-20230606094252367"></p>
 <p>thankyou.php</p>
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC5%E9%9D%B6%E5%9C%BA/image-20230606094515982.png" alt="image-20230606094515982"></p>
-<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><h4 id="1-爆破参数名"><a href="#1-爆破参数名" class="headerlink" title="1.爆破参数名"></a>1.爆破参数名</h4><p>尝试利用wfuzz爆破参数名</p>
+<h3 id="三、漏洞利用"><a href="#三、漏洞利用" class="headerlink" title="三、漏洞利用"></a>三、漏洞利用</h3><h4 id="1-爆破参数名"><a href="#1-爆破参数名" class="headerlink" title="1.爆破参数名"></a>1.爆破参数名</h4><p>尝试利用wfuzz爆破参数名</p>
 <blockquote>
 <p>这个可以解决报错</p>
 <p>apt –purge remove python3-pycurl &amp;&amp; apt install libcurl4-openssl-dev libssl-dev</p>
@@ -248,7 +248,7 @@
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC5%E9%9D%B6%E5%9C%BA/image-20230606142132339.png" alt="image-20230606142132339"></p>
 <p>得到命令行，输入 <code>whoami</code> 会发现是root权限</p>
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC5%E9%9D%B6%E5%9C%BA/image-20230606142258872.png" alt="image-20230606142258872"></p>
-<h2 id="知识点总结"><a href="#知识点总结" class="headerlink" title="知识点总结"></a>知识点总结</h2><blockquote>
+<h3 id="四、知识点总结"><a href="#四、知识点总结" class="headerlink" title="四、知识点总结"></a>四、知识点总结</h3><blockquote>
 <p>如何判断文件包含 thankyou.php文件包含footer.php<br>如何验证文件包含 file &#x3D;&#x2F;etc&#x2F;passwd<br>如何去利用文件包含 :<br>去找到文件源码，从源码中找信息<br>但由于是nginx1.6.2，有一个error.log，因此可以利用一句话木马<br>提权：screnn4.5.0<br>如何去利用，searchsploit去寻找这个漏洞相关信息<br>帮助文档能看懂<br>如何去下载文件<br>开一个端口，让其它主机去访问这个端口从而下载文件</p>
 </blockquote>
 <p>本文参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/xhx836161547/article/details/128313056">https://blog.csdn.net/xhx836161547/article/details/128313056</a></p>
