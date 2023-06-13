@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">0</span>
+            <span class="post-count">357</span>
         </span>
     </span>
 
@@ -101,13 +101,48 @@
  
     </div>
       
+    <div class="tocbot"></div>
+
 
 
 
   
     <div class="article-entry" itemprop="articleBody">
        
-   
+  <h3 id="一、前期准备"><a href="#一、前期准备" class="headerlink" title="一、前期准备"></a>一、前期准备</h3><h4 id="1-下载地址"><a href="#1-下载地址" class="headerlink" title="1.下载地址"></a>1.下载地址</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://www.vulnhub.com/entry/dc-32,312/</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-准备工具"><a href="#2-准备工具" class="headerlink" title="2.准备工具"></a>2.准备工具</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">kali			桥接模式			192.168.1.49						</span><br><span class="line">dc-3			桥接模式			192.168.1.43</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h3><p>官网给出的信息</p>
+<blockquote>
+<p>这个靶场与之前的不同，只有一个入口点和一个flag，并且没有任何线索。<br>靶场只需要简单的下载，解压，打开并将其导入到VMware即可</p>
+</blockquote>
+<h4 id="1-寻找目标"><a href="#1-寻找目标" class="headerlink" title="1.寻找目标"></a>1.寻找目标</h4><p>扫描同一网段中的IP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arp-scan -l</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230612093741121.png" alt="image-20230612093741121"></p>
+<p>发现目标IP</p>
+<p>扫描靶机目标，查看目标开放的服务端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sS -A -p 1-65535 192.168.1.43</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230613084619194.png" alt="image-20230613084619194"></p>
+<p>通过扫描，发现了一些关键信息</p>
+<h4 id="2-收集网站信息"><a href="#2-收集网站信息" class="headerlink" title="2.收集网站信息"></a>2.收集网站信息</h4><p>在浏览器中输入地址查看，发现是Joomla</p>
+<blockquote>
+<p>Joomla 在海外使用较多，是一套使用 PHP 和 MySQL 开发的开源、跨平台的内容管理系统(CMS)。</p>
+</blockquote>
+<p>在页面中发现是一个登录页面，没有其他敏感信息，使用dirsearch扫描目录</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230613090659008.png" alt="image-20230613090659008"></p>
+<p>在<code>/administrator/index.php</code> 目录下发现后台登录页面</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230613092301105.png" alt="image-20230613092301105"></p>
+<h4 id="3-寻找漏洞"><a href="#3-寻找漏洞" class="headerlink" title="3.寻找漏洞"></a>3.寻找漏洞</h4><p>因为是常见的cms,所以我们直接扫Joomla! cms常见漏洞</p>
+<blockquote>
+<p>1.安装onlinetool(在线cms识别|信息泄露|工控|系统|物联网安全|cms漏洞扫描|nmap端口扫描|子域名获取 在线工具安装)</p>
+<p>地址 <a target="_blank" rel="noopener" href="https://github.com/iceyhexman/onlinetools">https://github.com/iceyhexman/onlinetools</a></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iceyhexman/onlinetools.git</span><br><span class="line">cd onlinetools</span><br><span class="line">pip3 install -r requirements.txt</span><br><span class="line">nohup python3 main.py &amp;</span><br></pre></td></tr></table></figure>
+
+ 
       <!-- reward -->
       
       <div id="reword-out">
