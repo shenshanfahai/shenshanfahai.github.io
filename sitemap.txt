@@ -1,8 +1,8 @@
+http://example.com/2023/06/13/Vulnhub%E7%B3%BB%E5%88%97-DC6%E9%9D%B6%E5%9C%BA/
 http://example.com/2023/06/05/Vulnhub%E7%B3%BB%E5%88%97-DC3%E9%9D%B6%E5%9C%BA/
 http://example.com/2023/06/13/Vulnhub%E7%B3%BB%E5%88%97-DC8%E9%9D%B6%E5%9C%BA/
 http://example.com/2023/06/05/Vulnhub%E7%B3%BB%E5%88%97-DC4%E9%9D%B6%E5%9C%BA/
 http://example.com/2023/06/13/Vulnhub%E7%B3%BB%E5%88%97-DC7%E9%9D%B6%E5%9C%BA/
-http://example.com/2023/06/13/Vulnhub%E7%B3%BB%E5%88%97-DC6%E9%9D%B6%E5%9C%BA/
 http://example.com/2023/06/05/Vulnhub%E7%B3%BB%E5%88%97-DC2%E9%9D%B6%E5%9C%BA/
 http://example.com/2023/05/24/Vulnhub%E7%B3%BB%E5%88%97-DC1%E9%9D%B6%E5%9C%BA/
 http://example.com/2023/06/05/Vulnhub%E7%B3%BB%E5%88%97-DC5%E9%9D%B6%E5%9C%BA/
